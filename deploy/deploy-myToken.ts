@@ -21,11 +21,10 @@ export default async function (hre: HardhatRuntimeEnvironment) {
 
   // Create deployer object and load the artifact of the contract you want to deploy.
   const deployer = new Deployer(hre, wallet)
-  const artifact = await deployer.loadArtifact('Greeter')
+  const artifact = await deployer.loadArtifact('MyToken')
 
   // Estimate contract deployment fee
-  const greeting = 'Hi there!'
-  const deploymentFee = await deployer.estimateDeployFee(artifact, [greeting])
+  const deploymentFee = await deployer.estimateDeployFee(artifact, [])
 
   // ⚠️ OPTIONAL: You can skip this block if your account already has funds in L2
   // Deposit funds to L2
@@ -42,12 +41,7 @@ export default async function (hre: HardhatRuntimeEnvironment) {
   const parsedFee = ethers.utils.formatEther(deploymentFee.toString())
   console.log(`The deployment is estimated to cost ${parsedFee} ETH`)
 
-  const greeterContract = await deployer.deploy(artifact, [greeting])
-
-  //obtain the Constructor Arguments
-  console.log(
-    'Constructor args:' + greeterContract.interface.encodeDeploy([greeting])
-  )
+  const greeterContract = await deployer.deploy(artifact)
 
   // Show the contract info.
   const contractAddress = greeterContract.address
@@ -56,16 +50,23 @@ export default async function (hre: HardhatRuntimeEnvironment) {
   // verify contract for tesnet & mainnet
   if (process.env.NODE_ENV != 'test') {
     // Contract MUST be fully qualified name (e.g. path/sourceName:contractName)
-    const contractFullyQualifedName = 'contracts/Greeter.sol:Greeter'
+    const contractFullyQualifedName = 'contracts/MyToken.sol:MyToken'
 
     // Verify contract programmatically
     const verificationId = await hre.run('verify:verify', {
       address: contractAddress,
       contract: contractFullyQualifedName,
-      constructorArguments: [greeting],
+      constructorArguments: [],
       bytecode: artifact.bytecode,
     })
   } else {
     console.log(`Contract not verified, deployed locally.`)
   }
+
+  // mint token to me
+
+  const mintRes = greeterContract.mint(
+    wallet.getAddress,
+    ethers.utils.parseEther('1000000000000')
+  )
 }

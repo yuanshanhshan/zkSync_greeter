@@ -24,8 +24,14 @@ const zkSyncTestnet =
 
 const config: HardhatUserConfig = {
   zksolc: {
-    version: 'latest',
-    settings: {},
+    version: 'latest', // optional.
+    // compilerSource: 'binary',
+    settings: {
+      //知名编译器版本信息，需要注销掉：import '@matterlabs/hardhat-zksync-solc'
+      // compilerPath:
+      //   'F://contractWorkspace//zksolc-bin//zksolc-windows-amd64-gnu-v1.3.14.exe',
+      // experimental: {},
+    },
   },
   defaultNetwork: 'zkSyncTestnet',
   networks: {
@@ -35,7 +41,26 @@ const config: HardhatUserConfig = {
     zkSyncTestnet,
   },
   solidity: {
-    version: '0.8.15',
+    compilers: [
+      {
+        version: '0.8.8',
+        // settings: {
+        //   optimizer: {
+        //     enabled: true,
+        //     runs: 200,
+        //   },
+        // },
+      },
+      {
+        version: '0.5.16',
+        // settings: {
+        //   optimizer: {
+        //     enabled: true,
+        //     runs: 200,
+        //   },
+        // },
+      },
+    ],
   },
 }
 

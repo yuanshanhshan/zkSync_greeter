@@ -1,49 +1,23 @@
 import { Contract, Web3Provider, Provider } from 'zksync-web3'
 import { ethers } from 'ethers'
+import { abi } from '../artifacts-zk/contracts/Greeter.sol/Greeter.json'
 // Process Env Variables
 import * as dotenv from 'dotenv'
-dotenv.config({ path: __dirname + '/.env' })
-const PRIVATEKEY = process.env.WALLET_PRIVATE_KEY
-const GREETER_CONTRACT_ADDRESS = '0xe00c276e01e100A5F53529F0CfF22e9d40713FD0'
-const GREETER_CONTRACT_ABI = [
-  {
-    inputs: [
-      {
-        internalType: 'string',
-        name: '_greeting',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
-    inputs: [],
-    name: 'greet',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'string',
-        name: '_greeting',
-        type: 'string',
-      },
-    ],
-    name: 'setGreeting',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-]
+dotenv.config()
+
+//HTTPS RPC endpoints
+const L1_RPC_ENDPOINT = process.env.L1_RPC_ENDPOINT
+const L2_RPC_ENDPOINT = process.env.L2_RPC_ENDPOINT
+
+const PRIVATEKEY = process.env.WALLET_PRIVATE_KEY || ''
+
+const GREETER_CONTRACT_ADDRESS = '0x5778A1Aa04d2f13166030D39F79d6D0Df8039c0B'
+if (!PRIVATEKEY) {
+  console.log('Please set your private key in the .env file')
+  process.exit(1)
+}
+
+const GREETER_CONTRACT_ABI = abi
 
 class Call {
   provider: any
@@ -70,7 +44,7 @@ class Call {
 
   async getBalance() {
     const balanceInUnits = await this.signer.getBalance(this.signer.pubulicKey)
-    console.log(balanceInUnits)
+    console.log(balanceInUnits.toString())
   }
 }
 
@@ -79,7 +53,7 @@ class Call {
 
   call.initializeProviderAndSigner()
 
-  // console.log(await call.getGreeting())
+  console.log(await call.getGreeting())
 
   await call.getBalance()
 })()

@@ -5,10 +5,12 @@
   "author": "Antonio <aug@matterlabs.dev>",
   "license": "MIT",
   "devDependencies": {
-    "@matterlabs/hardhat-zksync-deploy": "^0.6.3",
-    "@matterlabs/hardhat-zksync-solc": "^0.4.0",
-    "@matterlabs/hardhat-zksync-verify": "^0.1.8",
+    "@matterlabs/hardhat-zksync-deploy": "^0.6.5",
+    "@matterlabs/hardhat-zksync-solc": "^0.4.2",
+    "@matterlabs/hardhat-zksync-verify": "^0.2.0",
+    "@nomicfoundation/hardhat-verify": "^1.1.1",
     "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "@openzeppelin/contracts": "^4.9.3",
     "@types/chai": "^4.3.4",
     "@types/mocha": "^10.0.1",
     "chai": "^4.3.7",
@@ -24,5 +26,9 @@
     "test": "NODE_ENV=test hardhat test --network zkSyncTestnet",
     "deploy": "yarn hardhat deploy-zksync --script deploy-greeter.ts",
     "greet": "yarn hardhat deploy-zksync --script use-greeter.ts"
+  },
+  "dependencies": {
+    "global": "^4.4.0",
+    "zksync-cli": "^0.5.0"
   }
 }
